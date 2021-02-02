@@ -1,0 +1,7 @@
+version: "2"
+services:
+  blog-vue:
+    container_name: blog-vue
+    build: .
+    ports:
+      - 80:80

@@ -9,7 +9,14 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
-    "vue": "^2.6.11"
+    "moment-cli": "0.0.4",
+    "sockjs-client": "^1.5.0",
+    "stompjs": "^2.3.3",
+    "v-emoji-picker": "^2.3.3",
+    "vue": "^2.6.11",
+    "vue-router": "^3.5.1",
+    "vue-underscore": "^0.1.4",
+    "vuex": "^3.6.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
