@@ -131,7 +131,7 @@
         },
        sortArrays(arrays) {
             var items = _.sortBy(arrays, function(x){ return -(x.lastMsg && new Date(x.lastMsg.timestamp).getTime())},"");
-            return items.filter(x => x.name.toLowerCase().includes(this.search.toLowerCase()))
+            return items.filter(x =>  x.name && x.name.toLowerCase().includes(this.search.toLowerCase()))
         },
         sendSeenMessage:function(status){
             var stompClient = store.state.stompClient;

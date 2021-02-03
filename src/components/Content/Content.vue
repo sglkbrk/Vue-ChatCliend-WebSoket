@@ -17,6 +17,8 @@
     import * as Stomp from 'stompjs'
     import * as SockJS from 'sockjs-client'
 
+    import {getUser} from "../../util/ApiUtil"
+
 
   
   export default {
@@ -110,17 +112,44 @@
        setLastMsg:function(messages){
             var actRecipientId = store.state.activeChatRoom.recipientId;
             var chatRooms = store.state.chatRooms;
-            chatRooms.find(x =>{
-                if(x.recipientId == messages.senderId ) {
-                    x.lastMsg.content = messages.content;
-                    x.lastMsg.timestamp = messages.timestamp;
-                    x.lastMsg.senderId = messages.senderId;
-                    x.lastMsg.recipientId = messages.recipientId;
-                    if(actRecipientId != messages.senderId ) x.count = x.count ? x.count + 1 : 1;
-                    else x.count =0;
-                }
-            })
-            this.$store.commit('setChatRooms', chatRooms)
+            var item = chatRooms.find(x=> x.recipientId == messages.senderId);
+            if(!item) this.setFistMessage(messages);
+            else {
+              chatRooms.find(x =>{
+                  if(x.recipientId == messages.senderId ) {
+                      x.lastMsg.content = messages.content;
+                      x.lastMsg.timestamp = messages.timestamp;
+                      x.lastMsg.senderId = messages.senderId;
+                      x.lastMsg.recipientId = messages.recipientId;
+                      if(actRecipientId != messages.senderId ) x.count = x.count ? x.count + 1 : 1;
+                      else x.count =0;
+                  }
+              })
+              this.$store.commit('setChatRooms', chatRooms)
+            }
+            
+        },
+        setFistMessage:function(messages){
+          var chatRooms = store.state.chatRooms;
+          getUser(messages.senderId).then(res =>{
+             chatRooms.push({
+                chatId:"",
+                count: 1,
+                enddate:"",
+                id: "",
+                lastMsg: messages,
+                recipientId: messages.senderId,
+                senderId: messages.recipientId,
+                status:"",
+                type:  "S",
+                writing: false,
+                name:res.userProfile.displayName,
+                profilePicture:res.userProfile.profilePictureUrl
+              })
+              store.commit('setChatRooms', [])
+              store.commit('setChatRooms', chatRooms)
+          })
+        
         },
         setActiveUserWriting:function(messages){
           var activeChatRoom = store.state.activeChatRoom;

@@ -1,4 +1,4 @@
-const AUTH_SERVICE = "http://207.154.208.203:3000";
+const AUTH_SERVICE = "http://localhost:5000";
 const FILE_SERVICE = "http://207.154.208.203:3001";
 const CHAT_SERVICE = "http://207.154.208.203:8080";
 
@@ -22,7 +22,7 @@ const request = (options) => {
   return fetch(options.url, options).then((response) =>
     response.json().then((json) => {
       if (!response.ok) {
-        window.open("/login","_self")
+        if(response.status == 401) window.open("#/login","_self")
         return Promise.reject(json);
       }
       return json;
@@ -72,6 +72,17 @@ export function getUsers() {
     method: "GET",
   });
 }
+
+export function getUser(id) {
+  if (!localStorage.getItem("accessToken")) {
+    return Promise.reject("No access token set.");
+  }
+  return request({
+    url: AUTH_SERVICE + "/getUser/" + id,
+    method: "GET",
+  });
+}
+
 export function getuserSesion(recipientId) {
   if (!localStorage.getItem("accessToken")) {
     return Promise.reject("No access token set.");
