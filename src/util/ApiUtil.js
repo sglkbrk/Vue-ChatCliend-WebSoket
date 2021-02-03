@@ -1,4 +1,4 @@
-const AUTH_SERVICE = "http://localhost:5000";
+const AUTH_SERVICE = "http://207.154.208.203:5000";
 const FILE_SERVICE = "http://207.154.208.203:3001";
 const CHAT_SERVICE = "http://207.154.208.203:8080";
 
