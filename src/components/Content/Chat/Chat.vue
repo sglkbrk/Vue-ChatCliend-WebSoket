@@ -58,13 +58,13 @@
                                 <circle cx="5" cy="12" r="1"></circle>
                             </svg>
                         </a>
-                        <div class="dropdown-menu dropdown-menu-right show" style="position: absolute">
+                        <!-- <div class="dropdown-menu" style="position: absolute">
                             <a  data-navigation-target="contact-information" class="dropdown-item">Profile</a>
                             <a  class="dropdown-item">Add to archive</a>
                             <a  class="dropdown-item">Delete</a>
                             <div class="dropdown-divider"></div>
                             <a  class="dropdown-item text-danger">Block</a>
-                        </div>
+                        </div> -->
                     </li>
                 </ul>
             </div>
@@ -235,7 +235,7 @@
         },
         setLastMsg:function(msg){
             var recipientId = store.state.activeChatRoom.recipientId;
-            var chatRooms = store.state.chatRooms;
+            var chatRooms = JSON.parse(JSON.stringify(store.state.chatRooms));
             chatRooms.find(x =>{
                 if(x.recipientId == recipientId ) {
                     x.lastMsg.senderId = store.state.myUser.id;
@@ -245,6 +245,7 @@
                     x.lastMsg.status = "1";
                 }
             })
+            this.$store.commit('setChatRooms', chatRooms)
         },
         setUserWriting:function(){
             var _this = this;

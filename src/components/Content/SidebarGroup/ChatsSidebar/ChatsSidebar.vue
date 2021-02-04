@@ -105,6 +105,8 @@
                         var usr = user.find(x => x.id == item.recipientId)
                         item.profilePicture = usr.profilePicture
                         item.name = usr.name
+                        if(item.count > 0 )
+                        this.sendSeenMessage(item.recipientId , "2");
                     });
                     this.chatRooms = room;
                     this.$store.commit('setChatRooms', room)
@@ -116,7 +118,7 @@
            console.log(item);
            this.$store.commit('setActiveChatRoom', item )
            this.setLastMsg(item);
-           this.sendSeenMessage("3");
+           this.sendSeenMessage(item.recipientId,"3");
             var element = document.getElementsByClassName("mobile-open");
             if(element && element[0])element[0].classList.remove("mobile-open")
        },
@@ -133,9 +135,8 @@
             var items = _.sortBy(arrays, function(x){ return -(x.lastMsg && new Date(x.lastMsg.timestamp).getTime())},"");
             return items.filter(x =>  x.name && x.name.toLowerCase().includes(this.search.toLowerCase()))
         },
-        sendSeenMessage:function(status){
+        sendSeenMessage:function(recipientId,status){
             var stompClient = store.state.stompClient;
-            var recipientId = store.state.activeChatRoom.recipientId;
             if(stompClient.connected && recipientId){
                 const message = {
                 msgId:"",

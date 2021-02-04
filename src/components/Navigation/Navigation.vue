@@ -99,7 +99,7 @@
                         </svg>
                     </a>
                 </li>
-                <li data-toggle="tooltip" title="" data-placement="right" v-on:click="openUserSettingsModal()" d  data-original-title="User menu">
+                <li data-toggle="tooltip" title="" data-placement="right" v-on:click="onLogon()" d  data-original-title="User menu">
                     <a  data-toggle="dropdown">
                         <figure class="avatar">
                             <img v-bind:src="$store.getters.myUser.profilePicture" class="rounded-circle" alt="image">

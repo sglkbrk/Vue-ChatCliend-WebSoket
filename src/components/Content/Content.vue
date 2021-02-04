@@ -47,7 +47,7 @@
     },
     methods:{
        onConnect:function(){
-          this.SockJS = new SockJS("http://207.154.208.203:8080/ws");
+          this.SockJS = new SockJS("http://localhost:8082/ws");
           this.stompClient = Stomp.over(this.SockJS);
           this.stompClient.connect({}, this.onConnected, this.onError);
           this.$store.commit('setStompClient', this.stompClient)
@@ -99,12 +99,21 @@
               const messages = store.state.messages;
               messages[message.senderId].forEach(element => {if(element.status == "2" || element.status == "1") element.status = "3"});
               this.$store.commit('setMessages', messages);
-              
           }else{
               const messages = store.state.messages;
               messages[message.senderId].forEach(element => {if(element.status == "1")  element.status = "2"});
               this.$store.commit('setMessages', messages);
           }
+          this.updateSeenLastMessage(message.senderId,message.processType);
+       },
+       updateSeenLastMessage:function(recipientId,status){
+            var chatRooms = JSON.parse(JSON.stringify(store.state.chatRooms));
+            chatRooms.find(x =>{
+                if(x.recipientId == recipientId ) {
+                    x.lastMsg.status = status;
+                }
+            })
+            this.$store.commit('setChatRooms', chatRooms)
        },
        onError:function(){
          this.onConnect();
@@ -149,7 +158,6 @@
               store.commit('setChatRooms', [])
               store.commit('setChatRooms', chatRooms)
           })
-        
         },
         setActiveUserWriting:function(messages){
           var activeChatRoom = store.state.activeChatRoom;
@@ -179,9 +187,8 @@
             this.$store.commit('setChatRooms', chatRooms);
             }, 3000);
         },
-        sendSeenMessage:function(status,id){
+        sendSeenMessage:function(status,recipientId){
             var stompClient = store.state.stompClient;
-            var recipientId = store.state.activeChatRoom.recipientId ? store.state.activeChatRoom.recipientId : id;
             if(stompClient.connected && recipientId){
                 const message = {
                 msgId:"",
