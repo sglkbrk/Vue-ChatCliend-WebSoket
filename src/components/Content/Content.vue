@@ -47,7 +47,7 @@
     },
     methods:{
        onConnect:function(){
-          this.SockJS = new SockJS("http://207.154.208.203:8082/ws");
+          this.SockJS = new SockJS("http://207.154.208.203:8080/ws");
           this.stompClient = Stomp.over(this.SockJS);
           this.stompClient.connect({}, this.onConnected, this.onError);
           this.$store.commit('setStompClient', this.stompClient)
