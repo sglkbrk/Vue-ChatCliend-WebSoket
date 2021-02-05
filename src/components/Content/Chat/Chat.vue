@@ -230,7 +230,7 @@
                 stompClient.send("/app/chat", {}, JSON.stringify(message));
                 this.setLastMsg(this.msgContent);
                 this.msgContent = "";
-                 this.scrollToBottom();
+                this.scrollToBottom();
             }
         },
         setLastMsg:function(msg){
@@ -305,8 +305,7 @@
             getuserSesion(store.state.activeChatRoom.recipientId).then(res =>{
                 if(res.status == "1") this.sessionStatus = true
                 else this.sessionStatus = false
-                this.lastSeen =  moment(new Date(res.date)).format("DD ddd HH:mm")
-                
+                this.lastSeen =  moment(new Date(res.date)).format("DD ddd HH:mm");
             })
         },
         scrollToBottom:function(){

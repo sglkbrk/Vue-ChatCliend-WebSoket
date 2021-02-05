@@ -3,6 +3,8 @@ import App from './App'
 import VueRouter from 'vue-router'
 import home from './screen/home.vue'
 import login from './screen/login.vue'
+import register from './screen/register.vue'
+import Notifications from 'vue-notification'
 
 
 
@@ -17,6 +19,7 @@ import "./config/vue.config"
 // import "./assets/fonts/flaticon/font/flaticon.css";
 
 Vue.use(VueRouter)
+Vue.use(Notifications)
 
 Vue.config.productionTip = false
 
@@ -26,6 +29,7 @@ Vue.config.productionTip = false
 const routes =  [
   {path: '/', component: home},
   {path: '/login', component: login},
+  {path: '/register', component: register},
   // {path: '/detay/:id', component: detay},
   // {path: '/category/:id', component: category},
   // {path: '/category/:id/:pagno', component: category},

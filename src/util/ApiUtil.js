@@ -94,10 +94,15 @@ export function getuserSesion(recipientId) {
   });
 }
 
+export function signup(signupRequest) {
+  return request({
+    url: AUTH_SERVICE + "/users",
+    method: "POST",
+    body: JSON.stringify(signupRequest),
+  });
+}
+
 export function uploadFile(param,files) {
-  if (!localStorage.getItem("accessToken")) {
-    return Promise.reject("No access token set.");
-  }
   var formdata = new FormData();
   formdata.append("file", files, files.name);
   var requestOptions = {
