@@ -90,7 +90,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="dark-light-switcher"  v-on:click="changedTemplate()" data-toggle="tooltip" title="" data-placement="right"
+                    <a class="dark-light-switcher"  v-on:click="changedTemplate()" data-toggle="tooltip" title="" data-placement="right"
                         data-original-title="Light mode">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -99,19 +99,18 @@
                         </svg>
                     </a>
                 </li>
-                <li data-toggle="tooltip" title="" data-placement="right" v-on:click="onLogon()" d  data-original-title="User menu">
+                <li data-toggle="tooltip" title="" data-placement="right" v-on:click="openProfile()" d data-original-title="User menu">
                     <a  data-toggle="dropdown">
                         <figure class="avatar">
                             <img v-bind:src="$store.getters.myUser.profilePicture" class="rounded-circle" alt="image">
                         </figure>
                     </a>
-                    <div class="dropdown-menu">
-                        <a href="#" class="dropdown-item" data-toggle="modal" data-target="#editProfileModal">Edit
-                            profile</a>
-                        <a href="#" class="dropdown-item" data-navigation-target="contact-information">Profile</a>
-                        <a href="#" class="dropdown-item" data-toggle="modal" data-target="#settingModal">Settings</a>
+                    <div  v-if="profileModal" class="dropdown-content" >
+                        <a  class="dropdown-item" data-toggle="modal"  v-on:click="openProfileDialog()" data-navigation-target="contact-information">{{$store.getters.myUser.name}}</a>
+                        <a  class="dropdown-item" data-toggle="modal"  v-on:click="openUserSettingsModal()"   data-target="#editProfileModal">Edit Profil</a>
+                        <!-- <a  class="dropdown-item" data-toggle="modal" data-target="#settingModal">Settings</a>  -->
                         <div class="dropdown-divider"></div>
-                        <a href="login.html" class="dropdown-item text-danger">Logout</a>
+                        <a  v-on:click="onLogon()"  class="dropdown-item text-danger">Logout</a>
                     </div>
                 </li>
             </ul>
@@ -126,7 +125,19 @@
   export default {
     name: 'navigation',
     store,
+    data(){
+        return{
+            profileModal:false,
+        }
+    },
     methods: {
+        openProfile:function(){
+            this.profileModal = !this.profileModal
+        },
+        openProfileDialog:function(){
+            this.$store.commit('setProfileItem', store.state.myUser)
+            this.$store.commit('setProfileModal', !store.state.profileModal) 
+        },
         changed: function(param) {
             this.$store.commit('setActiveSideBar', param )
             var element = document.getElementsByClassName("sidebar-group")[0];
