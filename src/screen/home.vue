@@ -1,10 +1,12 @@
 <template>
 <body   v-on:click="navigationClose()"  v-bind:class="$store.getters.template"  >
-  <div v-if="loading" class="layout">
+  
+  <div v-if="loading"  class="layout">
     <navigation></navigation>
     <contentCpn></contentCpn>
-    <userSettings v-if="$store.getters.userSettingsModal"></userSettings>
     <imageModal v-if="false" ></imageModal>
+    <userSettings v-if="$store.getters.userSettingsModal"></userSettings>
+    <settings v-if="$store.getters.settingsModal"></settings>
   </div>
 </body>
   
@@ -13,6 +15,7 @@
   import navigation from "../components/Navigation/Navigation"
   import contentCpn from "../components/Content/Content"
   import userSettings from "../modal/UserSettings"
+  import settings from "../modal/Settings"
   import imageModal from "../modal/Image"
   import {getMyUser} from "../util/ApiUtil"
 
@@ -33,7 +36,8 @@
       navigation,
       contentCpn,
       userSettings,
-      imageModal
+      imageModal,
+      settings
     },
     methods:{
       getMyUser:function(){

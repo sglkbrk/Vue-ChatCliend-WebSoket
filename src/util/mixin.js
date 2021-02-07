@@ -47,11 +47,13 @@ export const myMixin = {
         },
         setNotification:function(message){
             var _this = this;
-            document.getElementById('alarm').play();
-            if (document.visibilityState != 'visible') {
-                var notification = new Notification(message.content, {
+            if(store.state.notificationData.soud) document.getElementById('alarm').play();
+            if (document.visibilityState != 'visible' && store.state.notificationData.notification) {
+                var json = {
                     data: message
-                });
+                }
+                if(store.state.notificationData.notificationMsg) json.body = message.content;
+                var notification = new Notification(message.senderName,json);
                 notification.onclick = function(param) {
                     console.log(param.currentTarget.data.senderId)
                     var item = store.state.chatRooms.find(x => x.recipientId == param.currentTarget.data.senderId )

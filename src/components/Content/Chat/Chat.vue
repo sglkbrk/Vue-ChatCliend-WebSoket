@@ -338,8 +338,6 @@
             });
         },
         allCloseModal:function(){
-            console.log("tik")
-            this.emojiModal = false;
         }
     }
   }

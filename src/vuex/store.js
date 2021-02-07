@@ -11,11 +11,17 @@ export const store = new Vuex.Store({
     stompClient:null,
     chatRooms:[],
     messages:{},
-    template:"dark",
+    template:localStorage.getItem("template")  || "dark",
     myUser:{},
     userSettingsModal:false,
+    settingsModal:false,
     profileModal:false,
-    profileItem:{}
+    profileItem:{},
+    notificationData:JSON.parse(localStorage.getItem("notificationData")) || {
+        notification:true,
+        notificationMsg:true,
+        soud:true
+    }
   },
   mutations: {
     setActiveSideBar(state, activeSideBar) {
@@ -47,6 +53,12 @@ export const store = new Vuex.Store({
     },
     setProfileModal(state, profileModal) {
       state.profileModal = profileModal
+    },
+    setSettingsModal(state, settingsModal) {
+      state.settingsModal = settingsModal
+    },
+    setNotificationData(state, notificationData) {
+      state.notificationData = notificationData
     }
   },
   getters: {
@@ -59,5 +71,8 @@ export const store = new Vuex.Store({
     userSettingsModal: state => state.userSettingsModal,
     profileItem: state => state.profileItem,
     profileModal: state => state.profileModal,
+    settingsModal: state => state.settingsModal,
+    notificationData: state => state.notificationData,
+    
   }
 })

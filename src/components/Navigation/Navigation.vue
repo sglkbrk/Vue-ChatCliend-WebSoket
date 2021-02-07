@@ -108,6 +108,8 @@
                     <div class="dropdown-content profileModal" >
                         <a  class="dropdown-item" data-toggle="modal"  v-on:click="openProfileDialog()" data-navigation-target="contact-information">{{$store.getters.myUser.name}}</a>
                         <a  class="dropdown-item" data-toggle="modal"  v-on:click="openUserSettingsModal()"   data-target="#editProfileModal">Edit Profil</a>
+                        <a  class="dropdown-item" data-toggle="modal"  v-on:click="openSettingsModal()"   data-target="#editProfileModal">Ayarlar</a>
+
                         <!-- <a  class="dropdown-item" data-toggle="modal" data-target="#settingModal">Settings</a>  -->
                         <div class="dropdown-divider"></div>
                         <a  v-on:click="onLogon()"  class="dropdown-item text-danger">Logout</a>
@@ -162,7 +164,9 @@
             }
         },
         changedTemplate: function() {
-            this.$store.commit('setTemplate', store.state.template == "" ? "dark" : "" )
+            var tm = store.state.template == " " ? "dark" : " " 
+            this.$store.commit('setTemplate',tm)
+            localStorage.setItem("template", tm)
         },
         onLogon: function(){
            var stompClient = store.state.stompClient;
@@ -171,18 +175,14 @@
            localStorage.clear();
         },
         openUserSettingsModal:function(){
-            var _this = this;
             if(store.state.userSettingsModal) return;
             this.$store.commit('setUserSettingsModal', true);
             document.getElementsByClassName("profileModal")[0].style.display = "block"
-            function uclose() {
-                console.log("112")
-                _this.$store.commit('setUserSettingsModal', false);
-                document.body.removeEventListener("click",uclose)
-            }
-            setTimeout(() => {
-                 document.body.addEventListener("click", uclose)
-            });
+        },
+        openSettingsModal:function(){
+            if(store.state.settingsModal) return;
+            this.$store.commit('setSettingsModal', true);
+            document.getElementsByClassName("profileModal")[0].style.display = "block"
         }
     }
   }
