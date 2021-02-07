@@ -81,10 +81,10 @@
             <form >
                
                 <div>
-                    <button class="btn btn-light mr-3" data-toggle="tooltip" title=""  type="button"
+                    <button  v-on:click="openAndCloseEmojiModal()"  class="btn btn-light mr-3" data-toggle="tooltip" title=""  type="button"
                         data-original-title="Emoji">
                         <div>
-                            <svg v-on:click="openAndCloseEmojiModal()"  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            <svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                                 class="feather feather-smile">
                                 <circle cx="12" cy="12" r="10"></circle>
@@ -93,7 +93,7 @@
                                 <line x1="15" y1="9" x2="15.01" y2="9"></line>
                             </svg>
                         </div>
-                        <div v-if="emojiModal" class="dropdown-content">
+                        <div class="dropdown-content emojiModal">
                                 <VEmojiPicker @select="selectEmoji" />
                         </div>
                     </button>
@@ -161,8 +161,7 @@
             uploadFileVis:false,
             sessionInterval:null,
             sessionStatus:false,
-            lastSeen:null,
-            emojiModal:false,
+            lastSeen:null
         }
     },
     created: function () {
@@ -321,8 +320,21 @@
             this.msgContent =this.msgContent + " " + emoji.data;
             document.getElementById("msgContent_id").focus();
         },
+        // openAndCloseEmojiModal:function(){
+        //     this.emojiModal = !this.emojiModal
+        // },
         openAndCloseEmojiModal:function(){
-            this.emojiModal = !this.emojiModal
+            var syl =  document.getElementsByClassName("emojiModal")[0].style.display;
+            if(syl == "block" ) return;
+            document.getElementsByClassName("emojiModal")[0].style.display = "block"
+            function close() {
+                console.log("123");
+                document.getElementsByClassName("emojiModal")[0].style.display = "none"
+                document.body.removeEventListener("click",close)
+            }
+            setTimeout(() => {
+                 document.body.addEventListener("click", close)
+            });
         },
         allCloseModal:function(){
             console.log("tik")

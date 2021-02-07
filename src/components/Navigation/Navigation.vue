@@ -105,7 +105,7 @@
                             <img v-bind:src="$store.getters.myUser.profilePicture" class="rounded-circle" alt="image">
                         </figure>
                     </a>
-                    <div  v-if="profileModal" class="dropdown-content" >
+                    <div class="dropdown-content profileModal" >
                         <a  class="dropdown-item" data-toggle="modal"  v-on:click="openProfileDialog()" data-navigation-target="contact-information">{{$store.getters.myUser.name}}</a>
                         <a  class="dropdown-item" data-toggle="modal"  v-on:click="openUserSettingsModal()"   data-target="#editProfileModal">Edit Profil</a>
                         <!-- <a  class="dropdown-item" data-toggle="modal" data-target="#settingModal">Settings</a>  -->
@@ -127,16 +127,26 @@
     store,
     data(){
         return{
-            profileModal:false,
         }
     },
     methods: {
         openProfile:function(){
-            this.profileModal = !this.profileModal
+            var syl =  document.getElementsByClassName("profileModal")[0].style.display;
+            if(syl == "block" ) return;
+            document.getElementsByClassName("profileModal")[0].style.display = "block"
+            function close() {
+                console.log("123");
+                document.getElementsByClassName("profileModal")[0].style.display = "none"
+                document.body.removeEventListener("click",close)
+            }
+            setTimeout(() => {
+                 document.body.addEventListener("click", close)
+            });
         },
         openProfileDialog:function(){
             this.$store.commit('setProfileItem', store.state.myUser)
-            this.$store.commit('setProfileModal', !store.state.profileModal) 
+            this.$store.commit('setProfileModal', !store.state.profileModal)
+            this.openProfile();
         },
         changed: function(param) {
             this.$store.commit('setActiveSideBar', param )
@@ -161,7 +171,18 @@
            localStorage.clear();
         },
         openUserSettingsModal:function(){
+            var _this = this;
+            if(store.state.userSettingsModal) return;
             this.$store.commit('setUserSettingsModal', true);
+            document.getElementsByClassName("profileModal")[0].style.display = "block"
+            function uclose() {
+                console.log("112")
+                _this.$store.commit('setUserSettingsModal', false);
+                document.body.removeEventListener("click",uclose)
+            }
+            setTimeout(() => {
+                 document.body.addEventListener("click", uclose)
+            });
         }
     }
   }

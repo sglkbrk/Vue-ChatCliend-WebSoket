@@ -81,12 +81,13 @@
   import * as moment from 'moment'
   import {getUserChatRoom,getUsers} from "../../../../util/ApiUtil"
   import {_}  from 'vue-underscore';
+  import {myMixin} from "../../../../util/mixin"
 
   export default {
     name: 'chatsSlideBar',
     store,
+    mixins: [myMixin],
     created: function () {
-        // this.moment.locale('tr');
         this.getChatRoom();
     },
     data(){
@@ -113,40 +114,9 @@
                 })
             })
        },
-       setActiveChatRoom:function(item){
-           item.writing = item.writing ? item.writing  :  false;
-           console.log(item);
-           this.$store.commit('setActiveChatRoom', item )
-           this.setLastMsg(item);
-           this.sendSeenMessage(item.recipientId,"3");
-            var element = document.getElementsByClassName("mobile-open");
-            if(element && element[0])element[0].classList.remove("mobile-open")
-       },
-       setLastMsg:function(item){
-            var chatRooms = store.state.chatRooms;
-            chatRooms.find(x =>{
-                if(x.recipientId == item.recipientId ) {
-                     x.count =0;
-                }
-            })
-            this.$store.commit('setChatRooms', chatRooms)
-        },
        sortArrays(arrays) {
             var items = _.sortBy(arrays, function(x){ return -(x.lastMsg && new Date(x.lastMsg.timestamp).getTime())},"");
             return items.filter(x =>  x.name && x.name.toLowerCase().includes(this.search.toLowerCase()))
-        },
-        sendSeenMessage:function(recipientId,status){
-            var stompClient = store.state.stompClient;
-            if(stompClient.connected && recipientId){
-                const message = {
-                msgId:"",
-                chatId:"",
-                senderId:store.state.myUser.id,
-                recipientId:recipientId,
-                processType :status,
-                };
-                stompClient.send("/app/seenmessage", {}, JSON.stringify(message));
-            }
         },
         closeChatSideBar:function(){
             var element = document.getElementsByClassName("mobile-open");

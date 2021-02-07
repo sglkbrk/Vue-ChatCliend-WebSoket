@@ -30,3 +30,11 @@
   text-decoration: none;
   display: block;
 }
+
+.profileModal{
+  display: none;
+}
+
+.emojiModal{
+  display: none;
+}
