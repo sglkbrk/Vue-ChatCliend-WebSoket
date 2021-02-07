@@ -52,11 +52,9 @@
                         <div>
                             <h5 v-bind:class="item.count > 0 ? 'text-primary' : '' "  >{{item.name}}</h5>
                             <p v-if="!item.writing" >
-                                <!-- <p> -->
-                                    <i v-if="item.lastMsg.senderId == $store.getters.myUser.id && item.lastMsg.status === '3' " class="ti-double-check text-info"></i>
-                                    <i v-else-if="item.lastMsg.senderId == $store.getters.myUser.id && item.lastMsg.status === '2' " class="ti-double-check"></i>
-                                    <i v-else-if="item.lastMsg.senderId == $store.getters.myUser.id && item.lastMsg.status === '1' " class="ti-check"></i>
-                                <!-- </p> -->
+                                <i v-if="      item.lastMsg && item.lastMsg.senderId == $store.getters.myUser.id && item.lastMsg.status === '3' " class="ti-double-check text-info"></i>
+                                <i v-else-if=" item.lastMsg && item.lastMsg.senderId == $store.getters.myUser.id && item.lastMsg.status === '2' " class="ti-double-check"></i>
+                                <i v-else-if=" item.lastMsg && item.lastMsg.senderId == $store.getters.myUser.id && item.lastMsg.status === '1' " class="ti-check"></i>                            
                                 {{item.lastMsg && item.lastMsg.content}}
                             </p>
                             <i v-if="item.writing" >Yazıyor...</i>

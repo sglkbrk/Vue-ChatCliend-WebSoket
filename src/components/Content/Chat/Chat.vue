@@ -213,8 +213,8 @@
                 const message = {
                     senderId: store.state.myUser.id,
                     recipientId: recipientId,
-                    senderName: "burak Sağlık",
-                    recipientName:  store.state.activeChatRoom.lastMsg.recipientName ,
+                    senderName: store.state.myUser.name,
+                    recipientName:  store.state.activeChatRoom.name ,
                     content: msgContent,
                     timestamp: new Date(),
                     status:stompClient.connected ? "1" : 0,
@@ -237,6 +237,7 @@
             var chatRooms = JSON.parse(JSON.stringify(store.state.chatRooms));
             chatRooms.find(x =>{
                 if(x.recipientId == recipientId ) {
+                    if (!x.lastMsg) x.lastMsg = {};
                     x.lastMsg.senderId = store.state.myUser.id;
                     x.lastMsg.recipientId = recipientId;
                     x.lastMsg.content = msg;
