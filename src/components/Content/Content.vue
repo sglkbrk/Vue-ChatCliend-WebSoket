@@ -84,7 +84,9 @@
             setTimeout(function(){
                 document.getElementsByClassName("chat-body")[0].scrollTo(0,1000000);
             },100)
-            if(message.senderId == store.state.activeChatRoom.recipientId)this.sendSeenMessage(message.senderId,"3");
+            if(message.senderId == store.state.activeChatRoom.recipientId && document.visibilityState === 'visible'){
+              this.sendSeenMessage(message.senderId,"3");
+            }
             else {
               this.sendSeenMessage(message.senderId,"2");
               this.setNotification(message);

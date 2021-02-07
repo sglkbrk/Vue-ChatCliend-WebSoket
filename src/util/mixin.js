@@ -34,7 +34,6 @@ export const myMixin = {
         },
         sendSeenMessage:function(recipientId,status){
             var stompClient = store.state.stompClient;
-            if (document.visibilityState != 'visible') status = "2";
             if(stompClient.connected && recipientId){
                 const message = {
                 msgId:"",
