@@ -112,7 +112,7 @@
 
                         <!-- <a  class="dropdown-item" data-toggle="modal" data-target="#settingModal">Settings</a>  -->
                         <div class="dropdown-divider"></div>
-                        <a  v-on:click="onLogon()"  class="dropdown-item text-danger">Logout</a>
+                        <a  v-on:click="onLogon()"  class="dropdown-item text-danger">Çıkış</a>
                     </div>
                 </li>
             </ul>

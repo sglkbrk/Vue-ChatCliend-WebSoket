@@ -38,3 +38,9 @@
 .emojiModal{
   display: none;
 }
+
+.registerModal{
+  justify-content: center;
+  align-items: center;
+  max-width: 500px;
+}

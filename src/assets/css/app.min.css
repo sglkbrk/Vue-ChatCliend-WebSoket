@@ -8663,7 +8663,10 @@ body.form-membership .form-wrapper hr {
     -webkit-border-radius: 7px;
     -moz-border-radius: 7px;
     border-radius: 7px;
-    padding: 10px 20px
+    padding: 10px 20px;
+    word-break: break-all;
+    text-overflow: ellipsis;
+    max-width: 300px;
 }
 
 .layout .content .chat .chat-body .messages .message-item .message-content.message-file {
