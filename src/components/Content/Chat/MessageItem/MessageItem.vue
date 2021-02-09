@@ -16,8 +16,8 @@
         <figure v-if="this.msgItem.type == 'I' ">
             <img v-bind:src="this.msgItem.fileurl" class="w-25 img-fluid rounded" alt="image">
         </figure>
-        <div  v-if="this.msgItem.type == 'M'" class="message-content">
-            {{msgItem.content}}
+        <div  v-if="this.msgItem.type == 'M'" v-html="linkparse(msgItem.content)" class="message-content">
+
         </div>
         <div v-if="this.msgItem.type == 'F' " style="background-color: #B0C4DE;color: #000000;" class="message-content message-file">
             <div class="file-icon">
@@ -68,6 +68,12 @@
                 default:
                     return "ti ti-files"
             }
+        },
+        linkparse :function (text) {
+            var urlRegex = /(https?:\/\/[^\s]+)/g;
+            return text.replace(urlRegex, function(url) {
+                return '<a target="_blank" href="' + url + '">' + url + '</a>';
+            })
         },
         fileSizeToText:function(bytes){
             var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
