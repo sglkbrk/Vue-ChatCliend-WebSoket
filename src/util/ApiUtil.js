@@ -1,6 +1,6 @@
-const AUTH_SERVICE = "http://207.154.208.203:3000";
-const FILE_SERVICE = "http://207.154.208.203:3001";
-const CHAT_SERVICE = "http://207.154.208.203:8080";
+const AUTH_SERVICE = "https://bsaglik.com:3000";
+const FILE_SERVICE = "https://bsaglik.com:3001";
+const CHAT_SERVICE = "https://bsaglik.com:8080";
 
 const request = (options) => {
   const headers = new Headers();
