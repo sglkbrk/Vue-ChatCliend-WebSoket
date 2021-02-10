@@ -1,6 +1,6 @@
-const AUTH_SERVICE = "https://bsaglik.com:3000";
-const FILE_SERVICE = "https://bsaglik.com:3001";
-const CHAT_SERVICE = "https://bsaglik.com:8080";
+const AUTH_SERVICE = "https://bsaglik.com/auth";
+const FILE_SERVICE = "https://bsaglik.com/fileservice";
+const CHAT_SERVICE = "https://bsaglik.com/websocket";
 
 const request = (options) => {
   const headers = new Headers();
