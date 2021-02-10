@@ -53,6 +53,7 @@
       navigationClose:function(){
           var element = document.getElementsByTagName("body")[1]
           element.classList.remove("navigation-open");
+          document.getElementById('alarm').played
       }
     }
   }

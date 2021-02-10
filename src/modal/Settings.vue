@@ -48,7 +48,7 @@
                     </div>
                     <div class="tab-pane show active" v-if="notification" id="notification" role="tabpanel">
                         <div class="form-item custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input" v-model="notificationData.notification" id="customSwitch6">
+                            <input type="checkbox" class="custom-control-input" v-on:change="notificationFun" v-model="notificationData.notification" id="customSwitch6">
                             <label class="custom-control-label" for="customSwitch6">Bildirimler</label>
                         </div>
                         <div class="form-item custom-control custom-switch">
@@ -131,6 +131,13 @@
 
     },
     methods:{
+        notificationFun:function(){
+            if(this.notificationData.notification ){
+                Notification.requestPermission().then(function(result) {
+                    console.log(result);
+                });
+            }
+        },
         saveSettings:function(){
             localStorage.setItem("notificationData",JSON.stringify(this.notificationData))
             this.$store.commit('setNotificationData', this.notificationData);
