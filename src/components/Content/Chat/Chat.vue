@@ -167,6 +167,7 @@
     created: function () {
         this.sessionStatus=false;
         this.getuserSesionInterval();
+        this.clipboard();
     },
     computed: {
         activeChatRoom () {
@@ -278,20 +279,35 @@
                 input.click();
             });
         },
-        selectFile:function(oEvent){
-            const fileList = oEvent.path[0].files;
-            console.log(fileList);
-            var type = fileList[0].type;
-            var size = fileList[0].size;
+        clipboard:function(){
+            var _this = this;
+            document.onpaste = function(pasteEvent) {
+                var activeChatRoom  = store.state.activeChatRoom ;
+                if(activeChatRoom && activeChatRoom.recipientId ){
+                    var item = pasteEvent.clipboardData.items[0];                
+                    if (item.type.indexOf("image") === 0) {
+                        var blob = item.getAsFile();
+                        console.log(blob)
+                        _this.selectFile("",blob);
+                    }
+                }
+            }
+        },
+        selectFile:function(oEvent,blob){
+            var fileItem = null;
+            if(blob)  fileItem = blob;
+            else  fileItem = oEvent.path[0].files[0];
+            var type = fileItem.type;
+            var size = fileItem.size;
             type = type.includes("image") ? "I" : "F";
             if(size > 5242880){
                 alert("Dosya Boyutu 5 MB Büyük olamaz")
             }else{
-                this.uploadFileVis = fileList[0].name;
+                this.uploadFileVis = fileItem.name;
                 this.scrollToBottom();
-                uploadFile(store.state.myUser.id,fileList[0]).then(res => {
+                uploadFile(store.state.myUser.id,fileItem).then(res => {
                     this.uploadFileVis = false;
-                    this.sendMessages(fileList[0].name,type,res,size)
+                    this.sendMessages(fileItem.name,type,res,size)
                 })
             }
         },
