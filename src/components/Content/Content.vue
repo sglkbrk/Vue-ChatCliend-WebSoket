@@ -59,7 +59,7 @@
       },
       methods:{
         onConnect:function(){
-            this.SockJS = new SockJS("https://bsaglik.com:8080/ws");
+            this.SockJS = new SockJS("https://bsaglik.com/websocket/ws");
             this.stompClient = Stomp.over(this.SockJS);
             this.stompClient.connect({}, this.onConnected, this.onError);
             this.$store.commit('setStompClient', this.stompClient);          
