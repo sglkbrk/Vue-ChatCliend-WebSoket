@@ -110,7 +110,7 @@ export function uploadFile(param,files) {
     body: formdata,
     redirect: 'follow'
   };
-  return fetch(FILE_SERVICE + "/FileService/uploadFile/" + param , requestOptions).then((response) =>
+  return fetch(FILE_SERVICE + "/uploadFile/" + param , requestOptions).then((response) =>
     response.text().then((text) => {
       if (!response.ok) {
         window.open("/login","_self")
