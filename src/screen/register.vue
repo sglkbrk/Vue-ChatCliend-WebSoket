@@ -12,7 +12,6 @@
                 <div class="modal-body">
                     <div class="tab-content">
                         <div class="tab-pane show active" id="personal" role="tabpanel">
-                            <form>
                                 <div class="form-group">
                                     <label for="fullname" class="col-form-label">İsim Soyisim</label>
                                     <div class="input-group">
@@ -65,7 +64,6 @@
                                     </div>
                                     <button  v-on:click="openFileDialog()" style="margin-top: 15px;"> Resim Yükle</button>
                                 </div>
-                            </form>
                         </div>
                     </div>
                 </div>
