@@ -331,7 +331,10 @@
         },
         openProfileDialog:function(){
             this.$store.commit('setProfileItem', store.state.activeChatRoom)
-            this.$store.commit('setProfileModal', true) 
+            var messages = store.state.messages[store.state.activeChatRoom.recipientId]
+            messages = messages.filter(x => x.type == "I" || x.type == "F");
+            this.$store.commit('setProfilMedia', messages);
+            this.$store.commit('setProfileModal', true);
         },
         selectEmoji(emoji) {
             this.msgContent =this.msgContent + " " + emoji.data;
@@ -344,10 +347,11 @@
             var syl =  document.getElementsByClassName("emojiModal")[0].style.display;
             if(syl == "block" ) return;
             document.getElementsByClassName("emojiModal")[0].style.display = "block"
-            function close() {
-                console.log("123");
-                document.getElementsByClassName("emojiModal")[0].style.display = "none"
-                document.body.removeEventListener("click",close)
+            function close(oEvent) {
+                if(!oEvent.target.closest(".emojiModal")){
+                    document.getElementsByClassName("emojiModal")[0].style.display = "none"
+                    document.body.removeEventListener("click",close)
+                }
             }
             setTimeout(() => {
                  document.body.addEventListener("click", close)

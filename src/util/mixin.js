@@ -1,13 +1,20 @@
 import {store} from "../vuex/store"
 export const myMixin = {
     store,
+    data(){
+        return{
+            msgSize:0,
+        }
+    },
     created: function () {
         var _this = this;
         document.addEventListener("visibilitychange", function() {
             if (document.visibilityState === 'visible') {
                 var item = store.state.activeChatRoom
                 if(item && item.recipientId){
-                    _this.sendSeenMessage(item.recipientId,"3")
+                    _this.sendSeenMessage(item.recipientId,"3");
+                    this.msgSize = 0;
+                    document.title = "SChat";
                 }
             }
           });
@@ -47,7 +54,6 @@ export const myMixin = {
         },
         setNotification:function(message){
             var _this = this;
-            if(store.state.notificationData.soud) document.getElementById('alarm').play();
             if (document.visibilityState != 'visible' && store.state.notificationData.notification) {
                 var json = {
                     data: message
@@ -61,6 +67,11 @@ export const myMixin = {
                     window.focus();
                 }
             }
+            if (document.visibilityState != 'visible'){
+                this.msgSize ++;
+                document.title = "SChat(" + this.msgSize + ")"
+            }
+            if(store.state.notificationData.soud) document.getElementById('alarm').play();
         }
     }
 }

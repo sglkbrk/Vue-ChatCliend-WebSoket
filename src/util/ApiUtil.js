@@ -104,7 +104,7 @@ export function signup(signupRequest) {
 
 export function uploadFile(param,files) {
   var formdata = new FormData();
-  formdata.append("file", files, files.name);
+  formdata.append("file", files, "(" + Math.floor(Math.random() * 1000000) + ")" + files.name );
   var requestOptions = {
     method: 'POST',
     body: formdata,

@@ -14,6 +14,7 @@
     "stompjs": "^2.3.3",
     "v-emoji-picker": "^2.3.3",
     "vue": "^2.6.11",
+    "vue-expandable-image": "^0.1.0",
     "vue-notification": "^1.3.20",
     "vue-router": "^3.5.1",
     "vue-underscore": "^0.1.4",

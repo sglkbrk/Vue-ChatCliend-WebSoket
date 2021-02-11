@@ -9,11 +9,14 @@
 <script>
   export default {
     name: 'App',
+    created:function(){
+      document.title = "SChat"
+    },
     metaInfo: {
       // if no subcomponents specify a metaInfo.title, this title will be used
       title: 'Sağlık Chat :)',
       // all titles will be injected into this template
-      // titleTemplate: '%s | My Awesome Webapp'
+      //  titleTemplate: '%s | My Awesome Webapp'
     }
   }
 </script>

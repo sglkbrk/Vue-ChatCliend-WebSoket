@@ -26,18 +26,18 @@
                         <small class="text-muted font-italic">Son Görülme: 395 yıl önce</small>
 
                         <ul class="nav nav-tabs justify-content-center mt-5" id="myTab" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" id="home-tab" data-toggle="tab"  role="tab"
+                            <li v-on:click="selectTab('home')" class="nav-item">
+                                <a class="nav-link" v-bind:class="home ? 'active' : '' "  id="home-tab" data-toggle="tab"  role="tab"
                                     aria-controls="home" aria-selected="true">Hakkında</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="profile-tab" data-toggle="tab"  role="tab"
+                            <li v-if="$store.getters.profileItem.id == $store.getters.myUser.id ? false : true " v-on:click="selectTab('media')" class="nav-item">
+                                <a class="nav-link"  v-bind:class="media ? 'active' : '' " id="profile-tab" data-toggle="tab"  role="tab"
                                     aria-controls="profile" aria-selected="false">Fotograf Ve Dosyalar</a>
                             </li>
                         </ul>
                     </div>
                     <div class="tab-content" id="myTabContent">
-                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="tab-pane fade" v-bind:class="home ? 'show active' : '' " id="home" role="tabpanel" aria-labelledby="home-tab">
                             <p class="text-muted">İtirazım Var</p>
                             <div class="mt-4 mb-4">
                                 <h6>Phone</h6>
@@ -129,40 +129,19 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                        <div class="tab-pane fade" v-bind:class="media ? 'show active' : '' " id="profile" role="tabpanel" aria-labelledby="profile-tab">
                             <h6 class="mb-3 d-flex align-items-center justify-content-between">
                                 <span>Recent Files</span>
-                                <a class="btn btn-link small">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round" class="feather feather-upload mr-2">
-                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                        <polyline points="17 8 12 3 7 8"></polyline>
-                                        <line x1="12" y1="3" x2="12" y2="15"></line>
-                                    </svg> Upload
-                                </a>
                             </h6>
                             <div>
                                 <ul class="list-group list-group-flush">
-                                    <li class="list-group-item pl-0 pr-0 d-flex align-items-center">
-                                        <a href="#">
-                                            <i class="fa fa-file-pdf-o text-danger mr-2"></i> report4221.pdf
+                                    <li  v-for="media in $store.getters.profilMedia " :key="media.id" class="list-group-item pl-0 pr-0 d-flex align-items-center">
+                                        <a>
+                                            <i  v-bind:class="getFileIcons(media.content)"></i> {{media.content}}
                                         </a>
-                                    </li>
-                                    <li class="list-group-item pl-0 pr-0 d-flex align-items-center">
-                                        <a href="#">
-                                            <i class="fa fa-image text-muted mr-2"></i> avatar_image.png
-                                        </a>
-                                    </li>
-                                    <li class="list-group-item pl-0 pr-0 d-flex align-items-center">
-                                        <a href="#">
-                                            <i class="fa fa-file-excel-o text-success mr-2"></i>
-                                            excel_report_file2020.xlsx
-                                        </a>
-                                    </li>
-                                    <li class="list-group-item pl-0 pr-0 d-flex align-items-center">
-                                        <a href="#">
-                                            <i class="fa fa-file-text-o text-warning mr-2"></i> articles342133.txt
+                                         <a  v-bind:href="media.fileurl" target="_black" class="btn btn-link small dowlandIcon">
+                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-activity"><path d="M3 17v3a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-3"></path><polyline points="8 12 12 16 16 12"></polyline><line x1="12" y1="2" x2="12" y2="16"></line></svg>
+                                             İndir
                                         </a>
                                     </li>
                                 </ul>
@@ -183,19 +162,52 @@
         data(){
             return{
                 SockJS:null,
-                stompClient :null
+                stompClient :null,
+                home:true,
+                media:false
             }
         },
         components: {
         },
         created: function () {
-        
+            console.log("qdsa")
         },
         methods:{
             closerofileDialog:function(){
                 this.$store.commit('setProfileModal', false) 
                 this.$store.commit('setProfileItem', {})
-            }
+            },
+            selectTab:function(tab){
+                this.home=false;
+                this.media=false;
+                this[tab]= true;
+            },
+            getFileIcons:function(link){
+                if(!link) return "ti ti-files"
+                var type = link.split(".")[link.split(".").length-1]
+                switch (type) {
+                    case "png":
+                    case "jpeg":
+                    case "gif":
+                        return "fa fa-image text-danger mr-2"
+                    case "pdf":
+                        return "fa fa-file-pdf-o text-danger mr-2"
+                    case "docx":
+                        return "fa fa-file-word-o text-danger mr-2"
+                    case "js":
+                        return "fa fa-file-code-o text-danger mr-2"
+                    case "xlsx":
+                    case "xls":
+                        return "fa fa-file-excel-o text-danger mr-2"
+                    case "pptx":
+                    case "ppsx":
+                        return "fa fa-file-powerpoint-o text-danger mr-2"
+                    case "zip":
+                        return "fa fa-file-zip-o text-danger mr-2"
+                    default:
+                        return "ti ti-files text-danger mr-2"
+                }
+            },
         }
     }
 </script>

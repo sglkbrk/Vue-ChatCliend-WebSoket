@@ -14,7 +14,7 @@
             </div>
         </div>
         <figure v-if="this.msgItem.type == 'I' ">
-            <img v-bind:src="this.msgItem.fileurl" class="w-25 img-fluid rounded" alt="image">
+            <img v-bind:src="this.msgItem.fileurl" v-on:click="deneme()" class="w-25 img-fluid rounded" alt="image">
         </figure>
         <div  v-if="this.msgItem.type == 'M'" v-html="linkparse(msgItem.content)" class="message-content">
 
@@ -80,6 +80,10 @@
             if (bytes == 0) return '0 Byte';
             var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
             return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
+        },
+        deneme:function(){
+            alert("123")
+            
         }
     }
     

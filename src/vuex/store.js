@@ -21,7 +21,8 @@ export const store = new Vuex.Store({
         notification:true,
         notificationMsg:true,
         soud:true
-    }
+    },
+    profilMedia:[],
   },
   mutations: {
     setActiveSideBar(state, activeSideBar) {
@@ -59,6 +60,9 @@ export const store = new Vuex.Store({
     },
     setNotificationData(state, notificationData) {
       state.notificationData = notificationData
+    },
+    setProfilMedia(state, profilMedia) {
+      state.profilMedia = profilMedia
     }
   },
   getters: {
@@ -73,6 +77,6 @@ export const store = new Vuex.Store({
     profileModal: state => state.profileModal,
     settingsModal: state => state.settingsModal,
     notificationData: state => state.notificationData,
-    
+    profilMedia: state => state.profilMedia,
   }
 })

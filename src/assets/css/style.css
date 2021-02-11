@@ -44,3 +44,8 @@
   align-items: center;
   max-width: 500px;
 }
+
+.dowlandIcon{
+  position: absolute;
+  right: 0;
+}
