@@ -181,7 +181,7 @@
           },
           setActiveUserWriting:function(messages){
             var activeChatRoom = store.state.activeChatRoom;
-            if(activeChatRoom.recipientId == messages.senderId ) {
+            if(activeChatRoom && activeChatRoom.recipientId && activeChatRoom.recipientId == messages.senderId ) {
               activeChatRoom.writing = true;
               this.$store.commit('setActiveChatRoom', {});
               this.$store.commit('setActiveChatRoom', activeChatRoom);

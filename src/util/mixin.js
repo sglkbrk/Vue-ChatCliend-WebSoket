@@ -13,9 +13,9 @@ export const myMixin = {
                 var item = store.state.activeChatRoom
                 if(item && item.recipientId){
                     _this.sendSeenMessage(item.recipientId,"3");
-                    this.msgSize = 0;
                     document.title = "SChat";
                 }
+                this.msgSize = 0;
             }
           });
     },

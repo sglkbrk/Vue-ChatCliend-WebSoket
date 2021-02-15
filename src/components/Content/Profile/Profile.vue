@@ -108,12 +108,12 @@
                             </div>
                             <div class="mt-4 mb-4">
                                 <h6 class="mb-3">Ayarlar</h6>
-                                <div class="form-group">
+                                <!-- <div class="form-group">
                                     <div class="form-item custom-control custom-switch">
                                         <input type="checkbox" class="custom-control-input" id="customSwitch11">
                                         <label class="custom-control-label" for="customSwitch11">Engelle</label>
                                     </div>
-                                </div>
+                                </div> -->
                                 <div class="form-group">
                                     <div class="form-item custom-control custom-switch">
                                         <input type="checkbox" class="custom-control-input" checked=""
