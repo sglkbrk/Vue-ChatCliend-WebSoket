@@ -8291,7 +8291,7 @@ body.form-membership .form-wrapper hr {
     -ms-flex-pack: justify;
     justify-content: space-between;
     padding: 0 30px;
-    height: 80px;
+    height: 60px;
     font-weight: 600;
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
@@ -8604,7 +8604,7 @@ body.form-membership .form-wrapper hr {
 
 .layout .content .chat .chat-body .messages .message-item {
     max-width: 75%;
-    margin-bottom: 3rem
+    /* margin-bottom: 3rem */
 }
 
 .layout .content .chat .chat-body .messages .message-item:last-child {
@@ -8663,10 +8663,11 @@ body.form-membership .form-wrapper hr {
     -webkit-border-radius: 7px;
     -moz-border-radius: 7px;
     border-radius: 7px;
-    padding: 10px 20px;
+    padding: 5px 10px;
     word-break: break-all;
     text-overflow: ellipsis;
     max-width: 300px;
+    min-width: 100px;
 }
 
 .layout .content .chat .chat-body .messages .message-item .message-content.message-file {
@@ -8740,7 +8741,7 @@ body.form-membership .form-wrapper hr {
 .layout .content .chat .chat-footer {
     border-top: 1px solid #e6e6e6;
     padding: 17px 30px;
-    padding-bottom: 50px
+    /* padding-bottom: 50px */
 }
 
 .layout .content .chat .chat-footer form {

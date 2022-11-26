@@ -47,7 +47,7 @@
                 <li class="list-group-item" data-navigation-target="chats" v-for="item in sortArrays(chatRooms)" :key="item.id" v-on:click="setActiveChatRoom(item)" >
                     <div>
                         <figure class="avatar">
-                            <img v-bind:src="item.profilePicture || '../../../../assets/images/women_avatar5.jpg'" class="rounded-circle" alt="image">
+                            <img v-bind:src=" config.fileurl +  item.profilePicture || '../../../../assets/images/women_avatar5.jpg'" class="rounded-circle" alt="image">
                         </figure>
                     </div>
                     <div class="users-list-body">
@@ -88,6 +88,7 @@
 
 <script>
 
+import config from '../../../../config/config'
   import {store} from "../../../../vuex/store"
   import * as moment from 'moment'
   import {getUsers} from "../../../../util/ApiUtil"
@@ -103,6 +104,7 @@
             moment:moment,
             chatRooms :[],
             search:"",
+            config:config
         }
     },
     methods:{

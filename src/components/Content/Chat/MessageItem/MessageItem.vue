@@ -1,8 +1,8 @@
 <template>
     <div   class="message-item" v-bind:class="this.msgItem.senderId == $store.getters.myUser.id  ? 'outgoing-message' : '' "  >
-        <div class="message-avatar">
+        <!-- <div class="message-avatar">
             <figure class="avatar">
-                <img v-bind:src="this.msgItem.senderId == $store.getters.myUser.id ? $store.getters.myUser.profilePicture : $store.getters.activeChatRoom.profilePicture" class="rounded-circle" alt="image">
+                <img v-bind:src="this.msgItem.senderId == $store.getters.myUser.id ? config.fileurl  + $store.getters.myUser.profilePicture : config.fileurl + $store.getters.activeChatRoom.profilePicture" class="rounded-circle" alt="image">
             </figure>
             <div>
                 <h5>{{this.msgItem.senderId == $store.getters.myUser.id ? $store.getters.myUser.name : $store.getters.activeChatRoom.name}}</h5>
@@ -12,28 +12,38 @@
                     <i v-if="this.msgItem.senderId == $store.getters.myUser.id && this.msgItem.status == '1' " class="ti-check"></i>
                 </div>
             </div>
-        </div>
+        </div> -->
         <figure v-if="this.msgItem.type == 'I' ">
-            <img v-bind:src="this.msgItem.fileurl" v-on:click="deneme()" class="w-25 img-fluid rounded" alt="image">
+            <img v-bind:src=" config.fileurl + this.msgItem.fileurl" v-on:click="deneme()" class="w-25 img-fluid rounded" alt="image">
         </figure>
         <div  v-if="this.msgItem.type == 'M'" v-html="linkparse(msgItem.content)" class="message-content">
 
         </div>
         <div v-if="this.msgItem.type == 'F' " style="background-color: #B0C4DE;color: #000000;" class="message-content message-file">
             <div class="file-icon">
-                <i v-bind:class="getFileIcons(this.msgItem.fileurl)"></i>
+                <i v-bind:class="getFileIcons( config.fileurl + this.msgItem.fileurl)"></i>
             </div>
             <div>
                 <div> {{msgItem.content}} <i  style="color:#4169E1" class="small">({{fileSizeToText(this.msgItem.filesize)}})</i></div>
                 <ul class="list-inline">
-                    <li class="list-inline-item mb-0"><a v-bind:href="this.msgItem.fileurl">indir</a></li>
+                    <li class="list-inline-item mb-0"><a v-bind:href=" config.fileurl + this.msgItem.fileurl">indir</a></li>
                 </ul>
+            </div>
+        </div>
+         <div class="message-avatar">
+            <div>
+                <div class="time">{{moment(new Date(msgItem.timestamp)).format('HH:mm') }} 
+                    <i v-if="this.msgItem.senderId == $store.getters.myUser.id && this.msgItem.status == '3' " class="ti-double-check text-info"></i>
+                    <i v-if="this.msgItem.senderId == $store.getters.myUser.id && this.msgItem.status == '2' " class="ti-double-check"></i>
+                    <i v-if="this.msgItem.senderId == $store.getters.myUser.id && this.msgItem.status == '1' " class="ti-check"></i>
+                </div>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+  import config from '../../../../config/config'
   import * as moment from 'moment'
   import {store} from "../../../../vuex/store"
   export default {
@@ -43,7 +53,8 @@
     data(){
         return{
             moment:moment,
-            messages :[]
+            messages :[],
+            config:config
         }
     },
     methods:{

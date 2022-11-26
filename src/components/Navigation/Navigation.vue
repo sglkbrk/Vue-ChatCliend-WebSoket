@@ -41,9 +41,9 @@
                     </a>
                 </li>
                 <li>
-                    <a v-bind:class="$store.getters.activeSideBar == 'chatsSidebar' ? 'active' : 'asd' " data-navigation-target="chats" v-on:click="changed('chatsSidebar')" data-toggle="tooltip" title=""
+                    <a v-bind:class="$store.getters.activeSideBar == 'chatsSidebar' ? 'active' : 'dd' " data-navigation-target="chats" v-on:click="changed('chatsSidebar')" data-toggle="tooltip" title=""
                         data-placement="right" data-original-title="Chats">
-                        <span class="badge badge-warning"></span>
+                        <span v-if="deneme()" class="badge badge-warning"></span>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                             class="feather feather-message-circle">
@@ -53,10 +53,10 @@
                         </svg>
                     </a>
                 </li>
-                <li>
-                    <a v-bind:class="$store.getters.activeSideBar == 'friendsSidebar' ? 'active' : 'asd' "  v-on:click="changed('friendsSidebar')" data-toggle="tooltip" title="" data-placement="right"
+                <li class="brackets">
+                    <a v-bind:class="$store.getters.activeSideBar == 'friendsSidebar' ? 'active' : 'dd' "  v-on:click="changed('friendsSidebar')" data-toggle="tooltip" title="" data-placement="right"
                         data-original-title="Friends">
-                        <span class="badge badge-danger"></span>
+                        <!-- <span class="badge badge-danger"></span> -->
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                             class="feather feather-user">
@@ -65,7 +65,7 @@
                         </svg>
                     </a>
                 </li>
-                <li>
+                <!-- <li>
                     <a  v-bind:class="$store.getters.activeSideBar == 'favoritesSidebar' ? 'active' : 'asd' "  v-on:click="changed('favoritesSidebar')" data-toggle="tooltip" title="" data-placement="right" href="#"
                         data-original-title="Favorites">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -76,8 +76,8 @@
                             </polygon>
                         </svg>
                     </a>
-                </li>
-                <li class="brackets">
+                </li> -->
+                <!-- <li class="brackets">
                     <a v-bind:class="$store.getters.activeSideBar == 'archivedSidebar' ? 'active' : 'asd' "  v-on:click="changed('archivedSidebar')" data-toggle="tooltip" title="" data-placement="right"
                         data-original-title="Archived">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -88,7 +88,7 @@
                             <line x1="10" y1="12" x2="14" y2="12"></line>
                         </svg>
                     </a>
-                </li>
+                </li> -->
                 <li>
                     <a class="dark-light-switcher"  v-on:click="changedTemplate()" data-toggle="tooltip" title="" data-placement="right"
                         data-original-title="Light mode">
@@ -102,7 +102,7 @@
                 <li data-toggle="tooltip" title="" data-placement="right" v-on:click="openProfile()" d data-original-title="User menu">
                     <a  data-toggle="dropdown">
                         <figure class="avatar">
-                            <img v-bind:src="$store.getters.myUser.profilePicture" class="rounded-circle" alt="image">
+                            <img v-bind:src=" config.fileurl + $store.getters.myUser.profilePicture" class="rounded-circle" alt="image">
                         </figure>
                     </a>
                     <div class="dropdown-content profileModal" >
@@ -122,13 +122,14 @@
 
 <script>
   import {store} from "../../vuex/store"
-
+ import config from '../../config/config'
 
   export default {
     name: 'navigation',
     store,
     data(){
         return{
+            config:config
         }
     },
     methods: {
@@ -183,7 +184,18 @@
             if(store.state.settingsModal) return;
             this.$store.commit('setSettingsModal', true);
             document.getElementsByClassName("profileModal")[0].style.display = "block"
-        }
+        },
+        deneme:function(){
+            var chatRooms = store.state.chatRooms;
+            var bool = false
+            chatRooms.find(x =>{
+                if(x.count > 0 ) {
+                    bool = true;
+                    return 
+                }
+            })
+            return bool;
+        },
     }
   }
 </script>

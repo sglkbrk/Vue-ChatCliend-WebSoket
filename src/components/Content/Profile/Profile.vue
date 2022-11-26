@@ -20,10 +20,10 @@
                 <div class="pl-4 pr-4">
                     <div class="text-center">
                         <figure class="avatar avatar-xl mb-4">
-                            <img v-bind:src="$store.getters.profileItem.profilePicture" class="rounded-circle" alt="image">
+                            <img v-bind:src="config.fileurl  + $store.getters.profileItem.profilePicture" class="rounded-circle" alt="image">
                         </figure>
                         <h5 class="mb-1">{{$store.getters.profileItem.name}}</h5>
-                        <small class="text-muted font-italic">Son Görülme: 395 yıl önce</small>
+                        <small class="text-muted font-italic">Sap Danışmanı</small>
 
                         <ul class="nav nav-tabs justify-content-center mt-5" id="myTab" role="tablist">
                             <li v-on:click="selectTab('home')" class="nav-item">
@@ -38,7 +38,7 @@
                     </div>
                     <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade" v-bind:class="home ? 'show active' : '' " id="home" role="tabpanel" aria-labelledby="home-tab">
-                            <p class="text-muted">İtirazım Var</p>
+                            <p class="text-muted">Açıkalama Alanı</p>
                             <div class="mt-4 mb-4">
                                 <h6>Phone</h6>
                                 <p class="text-muted">(555) 555 55 55</p>
@@ -50,7 +50,7 @@
                             <div class="mt-4 mb-4">
                                 <h6>Website</h6>
                                 <p>
-                                    <a href="#">www.bsaglik.com</a>
+                                    <a href="#">www.buraksaglik.fun</a>
                                 </p>
                             </div>
                             <div class="mt-4 mb-4">
@@ -131,18 +131,16 @@
                         </div>
                         <div class="tab-pane fade" v-bind:class="media ? 'show active' : '' " id="profile" role="tabpanel" aria-labelledby="profile-tab">
                             <h6 class="mb-3 d-flex align-items-center justify-content-between">
-                                <span>Recent Files</span>
+                                <span>Dosyalar</span>
                             </h6>
                             <div>
                                 <ul class="list-group list-group-flush">
                                     <li  v-for="media in $store.getters.profilMedia " :key="media.id" class="list-group-item pl-0 pr-0 d-flex align-items-center">
-                                        <a>
-                                            <i  v-bind:class="getFileIcons(media.content)"></i> {{media.content}}
-                                        </a>
-                                         <a  v-bind:href="media.fileurl" target="_black" class="btn btn-link small dowlandIcon">
-                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-activity"><path d="M3 17v3a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-3"></path><polyline points="8 12 12 16 16 12"></polyline><line x1="12" y1="2" x2="12" y2="16"></line></svg>
-                                             İndir
-                                        </a>
+                                            <i  v-bind:class="getFileIcons(media.content)"></i> 
+                                            <h6>{{getFileName(media.content)}}</h6>
+                                            <a  v-bind:href="media.fileurl" target="_black" class="btn btn-link small dowlandIcon">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-activity"><path d="M3 17v3a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-3"></path><polyline points="8 12 12 16 16 12"></polyline><line x1="12" y1="2" x2="12" y2="16"></line></svg>
+                                            </a>
                                     </li>
                                 </ul>
                             </div>
@@ -156,6 +154,7 @@
 
 <script>
     import {store} from "../../../vuex/store"
+    import config from '../../../config/config'
     export default {
         name: 'profil',
         store,
@@ -164,7 +163,8 @@
                 SockJS:null,
                 stompClient :null,
                 home:true,
-                media:false
+                media:false,
+                config:config
             }
         },
         components: {
@@ -181,6 +181,10 @@
                 this.home=false;
                 this.media=false;
                 this[tab]= true;
+            },
+            getFileName:function(name){
+                var dz = name.split(".");
+                return dz[0].slice(0,10) + "." + dz[1]
             },
             getFileIcons:function(link){
                 if(!link) return "ti ti-files"

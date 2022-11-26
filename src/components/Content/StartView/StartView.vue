@@ -21,7 +21,7 @@
             </div>
         </div>
         <div class="chat-body">
-            <h1>Fivori Team</h1>
+            <!-- <h1>Fivori Team</h1> -->
         </div>      
     </div>
 </template>

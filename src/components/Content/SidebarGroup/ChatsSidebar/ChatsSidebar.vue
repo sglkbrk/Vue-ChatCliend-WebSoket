@@ -2,7 +2,7 @@
     <div id="chats" class="sidebar active">
         <header>
             <span> Mesajlar </span>
-            <ul class="list-inline">
+            <!-- <ul class="list-inline">
                 <li class="list-inline-item" data-toggle="tooltip" title="" data-original-title="New group">
                     <a class="btn btn-outline-light"  data-toggle="modal" data-target="#newGroup">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -37,7 +37,7 @@
                         </svg>
                     </a>
                 </li>
-            </ul>
+            </ul> -->
         </header>
         <form>
             <input type="text" class="form-control" v-model="search" placeholder="Personel Ara">
@@ -46,7 +46,7 @@
             <ul class="list-group list-group-flush">
                 <li v-for="item in sortArrays($store.getters.chatRooms)" :key="item.recipientId" v-on:click="setActiveChatRoom(item)"  class="list-group-item" v-bind:class="$store.getters.activeChatRoom.recipientId == item.recipientId ? 'open-chat' : '' " >
                     <figure class="avatar">
-                        <img v-bind:src="item.profilePicture" class="rounded-circle" alt="image">
+                        <img v-bind:src="config.fileurl + item.profilePicture" class="rounded-circle" alt="image">
                     </figure>
                     <div class="users-list-body">
                         <div>
@@ -74,7 +74,7 @@
 
 
 <script>
-
+   import config from '../../../../config/config'
   import {store} from "../../../../vuex/store"
   import * as moment from 'moment'
   import {getUserChatRoom,getUsers} from "../../../../util/ApiUtil"
@@ -93,6 +93,7 @@
             moment:moment,
             chatRooms :[],
             search:"",
+            config:config
         }
     },
     methods:{
@@ -102,10 +103,13 @@
                 getUsers().then(user =>{
                     room.forEach(item => {
                         var usr = user.find(x => x.id == item.recipientId)
-                        item.profilePicture = usr.profilePicture
-                        item.name = usr.name
-                        if(item.count > 0 )
-                        this.sendSeenMessage(item.recipientId , "2");
+                        if(usr){
+                            item.profilePicture = usr.profilePicture
+                            item.name = usr.name
+                            if(item.count > 0 )
+                            this.sendSeenMessage(item.recipientId , "2");
+                        }
+                        
                     });
                     this.chatRooms = room;
                     this.$store.commit('setChatRooms', room)

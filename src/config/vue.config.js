@@ -1,6 +1,6 @@
 module.exports = {
     devServer: {
-        host: "207.154.208.203",
+        host: "34.159.95.236",
         hot: true,
         disableHostCheck: true,
     },

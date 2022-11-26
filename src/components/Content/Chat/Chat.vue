@@ -3,7 +3,7 @@
         <div class="chat-header">
             <div class="chat-header-user">
                 <figure class="avatar" v-bind:class="sessionStatus ? ' avatar-state-success' : ''" >
-                    <img v-bind:src="$store.getters.activeChatRoom.profilePicture" class="rounded-circle" alt="image">
+                    <img v-bind:src="config.fileurl + $store.getters.activeChatRoom.profilePicture" class="rounded-circle" alt="image">
                 </figure>
                 <div>
                     <h5>{{$store.getters.activeChatRoom.name || $store.getters.activeChatRoom.lastMsg.recipientName}}</h5>
@@ -70,12 +70,14 @@
             </div>
         </div>
         <div class="chat-body" v-on:click="allCloseModal()" >
-            <div class="messages" >       
-                    <messageItem   v-for="msg in messages" :key="msg.id"  v-bind:msgItem="msg"> </messageItem>
-                    <!-- <div class="message-item messages-divider sticky-top" data-label="Today"></div> -->
+                
+            <div v-for="(msg,index) in messages" :key="msg.id"  class="messages" > 
+                    <div v-if="index == 0" class="message-item messages-divider sticky-top" v-bind:data-label="getDiviDate(messages[index].timestamp)" ></div>  
+                    <div v-if="index > 0 &&  moment(new Date(msg.timestamp)).format('DDMMYYYY')  != moment(new Date(messages[index-1].timestamp)).format('DDMMYYYY') " class="message-item messages-divider sticky-top" v-bind:data-label="getDiviDate(msg.timestamp)" ></div>      
+                    <messageItem    v-bind:msgItem="msg"> </messageItem>
                     <!-- <div class="message-item messages-divider" data-label="1 message unread"></div> -->
-                    <p v-if="uploadFileVis" class="message-item outgoing-message" > Dosya gönderiliyor ... ({{uploadFileVis}}) </p>
             </div>  
+             <p v-if="uploadFileVis" class="message-item outgoing-message" > Dosya gönderiliyor ... ({{uploadFileVis}}) </p>
         </div>
         <div class="chat-footer">
             <form >
@@ -135,7 +137,8 @@
     </div>
 </template>
 <script>
-
+ "use strict"
+ import config from '../../../config/config'
   import {store} from "../../../vuex/store"
   import * as moment from 'moment'
   import {getChatMessages,uploadFile,getuserSesion} from "../../../util/ApiUtil"
@@ -161,7 +164,9 @@
             uploadFileVis:false,
             sessionInterval:null,
             sessionStatus:false,
-            lastSeen:null
+            lastSeen:null,
+            config:config,
+            lastdate:""
         }
     },
     created: function () {
@@ -189,7 +194,7 @@
         getMessages:function(activeChatRoom){
            this.lastSeen = null;
            this.messages = []
-            if(store.state.messages &&  store.state.messages[activeChatRoom.recipientId]){
+            if(store.state.messages &&  store.state.messages[activeChatRoom.recipientId] && activeChatRoom.openS){
                 this.messages =  store.state.messages[activeChatRoom.recipientId]
                 setTimeout(function(){
                     document.getElementsByClassName("chat-body")[0].scrollTo(0,1000000);
@@ -200,6 +205,7 @@
                     this.messages =  res
                     messages[activeChatRoom.recipientId] =  res
                     this.$store.commit('setMessages', messages)
+                    this.setLastMsgCount(activeChatRoom.recipientId);
                     setTimeout(function(){
                         document.getElementsByClassName("chat-body")[0].scrollTo(0,1000000);
                     },100)
@@ -207,6 +213,15 @@
             }
             
        },
+       setLastMsgCount:function(recipientId){
+            var chatRooms = store.state.chatRooms;
+            chatRooms.find(x =>{
+                if(x.recipientId == recipientId ) {
+                     x.openS = true;
+                }
+            })
+            this.$store.commit('setChatRooms', chatRooms)
+        },
        sendMessages:function(msgContent,type,fileurl,filesize){
             var stompClient = store.state.stompClient;
             var recipientId = store.state.activeChatRoom.recipientId;
@@ -357,7 +372,10 @@
                  document.body.addEventListener("click", close)
             });
         },
-        allCloseModal:function(){
+        getDiviDate:function(date){
+            if(moment(new Date(date)).format('DD.MM.YYYY') == moment(new Date()).format('DD.MM.YYYY')) return "Bugün"
+            else if(moment(new Date(date)).format('DD.MM.YYYY') == moment(new Date()).add(-1, 'days').format('DD.MM.YYYY')) return "Dün"
+            else return moment(new Date(date)).format('DD.MM.YYYY') ;
         }
     }
   }

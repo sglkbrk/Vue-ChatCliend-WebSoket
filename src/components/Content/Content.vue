@@ -17,18 +17,17 @@
     import profile from "./Profile/Profile"
     import * as Stomp from 'stompjs'
     import * as SockJS from 'sockjs-client'
-
     import {getUser} from "../../util/ApiUtil"
-
     import {myMixin} from "../../util/mixin"
-
+    import config from '../../config/config'
     export default {
       name: 'content',
       store,
       data(){
         return{
             SockJS:null,
-            stompClient :null
+            stompClient :null,
+            config:config
         }
       },
       mixins: [myMixin],
@@ -44,8 +43,6 @@
         Notification.requestPermission().then(function(result) {
           console.log(result);
         });
-        
-        
         document.onkeydown = function(evt) {
             evt = evt || window.event;
             var isEscape = false;
@@ -62,7 +59,7 @@
       },
       methods:{
         onConnect:function(){
-            this.SockJS = new SockJS("https://bsaglik.com/websocket/ws");
+            this.SockJS = new SockJS(config.soketUrl);
             this.stompClient = Stomp.over(this.SockJS);
             this.stompClient.connect({}, this.onConnected, this.onError);
             this.$store.commit('setStompClient', this.stompClient);          
@@ -173,7 +170,7 @@
                   type:  "S",
                   writing: false,
                   name:res.userProfile.displayName,
-                  profilePicture:res.userProfile.profilePictureUrl
+                  profilePicture:res?.userProfile?.profilePictureUrl
                 })
                 store.commit('setChatRooms', [])
                 store.commit('setChatRooms', chatRooms)

@@ -1,6 +1,6 @@
-const AUTH_SERVICE = "https://bsaglik.com/auth";
-const FILE_SERVICE = "https://bsaglik.com/fileservice";
-const CHAT_SERVICE = "https://bsaglik.com/websocket";
+const AUTH_SERVICE = "https://buraksaglik.fun/auth";
+const FILE_SERVICE = "https://buraksaglik.fun/fileservice";
+const CHAT_SERVICE = "https://buraksaglik.fun/websocket";
 
 const request = (options) => {
   const headers = new Headers();
