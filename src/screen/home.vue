@@ -6,6 +6,7 @@
     <contentCpn></contentCpn>
     <imageModal v-if="false" ></imageModal>
     <userSettings v-if="$store.getters.userSettingsModal"></userSettings>
+    <GroupModal v-if="$store.getters.groupModal"></GroupModal>
     <settings v-if="$store.getters.settingsModal"></settings>
   </div>
 </body>
@@ -15,6 +16,7 @@
   import navigation from "../components/Navigation/Navigation"
   import contentCpn from "../components/Content/Content"
   import userSettings from "../modal/UserSettings"
+  import GroupModal from "../modal/GroupModal"
   import settings from "../modal/Settings"
   import imageModal from "../modal/Image"
   import {getMyUser} from "../util/ApiUtil"
@@ -36,6 +38,7 @@
       navigation,
       contentCpn,
       userSettings,
+      GroupModal,
       imageModal,
       settings
     },

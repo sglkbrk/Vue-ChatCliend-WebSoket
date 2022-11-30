@@ -44,7 +44,7 @@
         </form>
         <div class="sidebar-body">
             <ul class="list-group list-group-flush">
-                <li class="list-group-item" data-navigation-target="chats" v-for="item in sortArrays(chatRooms)" :key="item.id" v-on:click="setActiveChatRoom(item)" >
+                <li class="list-group-item" data-navigation-target="chats" v-for="item in sortArrays(personList)" :key="item.id" v-on:click="setActiveChatRoom(item)" >
                     <div>
                         <figure class="avatar">
                             <img v-bind:src=" config.fileurl +  item.profilePicture || '../../../../assets/images/women_avatar5.jpg'" class="rounded-circle" alt="image">
@@ -88,10 +88,10 @@
 
 <script>
 
-import config from '../../../../config/config'
-  import {store} from "../../../../vuex/store"
-  import * as moment from 'moment'
-  import {getUsers} from "../../../../util/ApiUtil"
+    import config from '../../../../config/config'
+    import {store} from "../../../../vuex/store"
+    import * as moment from 'moment'
+    import {getUsers} from "../../../../util/ApiUtil"
 
   export default {
     name: 'FriendsSlideBar',
@@ -102,7 +102,7 @@ import config from '../../../../config/config'
     data(){
         return{
             moment:moment,
-            chatRooms :[],
+            personList :[],
             search:"",
             config:config
         }
@@ -111,7 +111,7 @@ import config from '../../../../config/config'
        getAllUsers:function(){
             getUsers().then(res =>{
                 console.log(res)
-                this.chatRooms = res;
+                this.personList = res;
             })
        },
        setActiveChatRoom:function(item){

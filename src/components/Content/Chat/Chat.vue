@@ -141,7 +141,7 @@
  import config from '../../../config/config'
   import {store} from "../../../vuex/store"
   import * as moment from 'moment'
-  import {getChatMessages,uploadFile,getuserSesion} from "../../../util/ApiUtil"
+  import {getChatMessages,uploadFile,getuserSesion,getGroupChatMessages} from "../../../util/ApiUtil"
   import messageItem from "./MessageItem/MessageItem"
 
   import { VEmojiPicker } from 'v-emoji-picker';
@@ -166,7 +166,8 @@
             sessionStatus:false,
             lastSeen:null,
             config:config,
-            lastdate:""
+            lastdate:"",
+            personList :[],
         }
     },
     created: function () {
@@ -200,7 +201,19 @@
                     document.getElementsByClassName("chat-body")[0].scrollTo(0,1000000);
                 },100)
             }else {
+                if(activeChatRoom.type == "S")
                 getChatMessages(store.state.myUser.id,activeChatRoom.recipientId).then(res =>{
+                     var messages = store.state.messages;
+                    this.messages =  res
+                    messages[activeChatRoom.recipientId] =  res
+                    this.$store.commit('setMessages', messages)
+                    this.setLastMsgCount(activeChatRoom.recipientId);
+                    setTimeout(function(){
+                        document.getElementsByClassName("chat-body")[0].scrollTo(0,1000000);
+                    },300)
+                })
+                else 
+                getGroupChatMessages(activeChatRoom.recipientId).then(res =>{
                     var messages = store.state.messages;
                     this.messages =  res
                     messages[activeChatRoom.recipientId] =  res
@@ -208,9 +221,12 @@
                     this.setLastMsgCount(activeChatRoom.recipientId);
                     setTimeout(function(){
                         document.getElementsByClassName("chat-body")[0].scrollTo(0,1000000);
-                    },100)
+                    },300)
                 })
             }
+            
+       },
+       setMessagesBody:function(res){
             
        },
        setLastMsgCount:function(recipientId){
@@ -223,6 +239,10 @@
             this.$store.commit('setChatRooms', chatRooms)
         },
        sendMessages:function(msgContent,type,fileurl,filesize){
+            if(store.state.activeChatRoom.type == "G"){
+                this.sendGroupMessages(msgContent,type,fileurl,filesize)
+                return;
+            }
             var stompClient = store.state.stompClient;
             var recipientId = store.state.activeChatRoom.recipientId;
             if (msgContent.trim() !== "") {
@@ -243,6 +263,32 @@
                 allMessages[recipientId] = this.messages
                 this.$store.commit('setMessages', allMessages)
                 stompClient.send("/app/chat", {}, JSON.stringify(message));
+                this.setLastMsg(this.msgContent);
+                this.msgContent = "";
+                this.scrollToBottom();
+            }
+        },
+        sendGroupMessages:function(msgContent,type,fileurl,filesize){
+            var stompClient = store.state.stompClient;
+            var recipientId = store.state.activeChatRoom.recipientId;
+            if (msgContent.trim() !== "") {
+                const message = {
+                    senderId: store.state.myUser.id,
+                    recipientId: recipientId,
+                    senderName: store.state.myUser.name,
+                    recipientName:  store.state.activeChatRoom.name ,
+                    content: msgContent,
+                    timestamp: new Date(),
+                    status:stompClient.connected ? "1" : 0,
+                    type: type ? type : "M",
+                    fileurl: fileurl ? fileurl : "",
+                    filesize: filesize ? filesize: ""
+                };
+                this.messages.push(message);
+                var allMessages =  store.state.messages;
+                allMessages[recipientId] = this.messages
+                this.$store.commit('setMessages', allMessages)
+                stompClient.send("/app/groupchat", {}, JSON.stringify(message));
                 this.setLastMsg(this.msgContent);
                 this.msgContent = "";
                 this.scrollToBottom();

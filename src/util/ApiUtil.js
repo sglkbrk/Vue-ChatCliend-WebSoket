@@ -1,7 +1,5 @@
-const AUTH_SERVICE = "https://buraksaglik.fun/auth";
-const FILE_SERVICE = "https://buraksaglik.fun/fileservice";
-const CHAT_SERVICE = "https://buraksaglik.fun/websocket";
-
+'use strict'
+const config = require('../config/config')
 const request = (options) => {
   const headers = new Headers();
 
@@ -32,21 +30,30 @@ const request = (options) => {
 
 export function getUserChatRoom(recipientId) {
   return request({
-    url: CHAT_SERVICE + "/getUserChatRoom/" + recipientId ,
+    url: config.soketUrl + "/getUserChatRoom/" + recipientId ,
     method: "GET",
   });
 }
 
 export function getChatMessages(senderId, recipientId) {
   return request({
-    url: CHAT_SERVICE + "/messages/" + senderId + "/" + recipientId,
+    url: config.soketUrl + "/messages/" + senderId + "/" + recipientId,
     method: "GET",
   });
 }
 
+export function getGroupChatMessages(recipientId) {
+  return request({
+    url: config.soketUrl + "/groupmessages/" + recipientId,
+    method: "GET",
+  });
+}
+
+
+
 export function login(loginRequest) {
   return request({
-    url: AUTH_SERVICE + "/signin",
+    url: config.authUrl + "/signin",
     method: "POST",
     body: JSON.stringify(loginRequest),
   });
@@ -57,7 +64,7 @@ export function getMyUser() {
     return Promise.reject("No access token set.");
   }
   return request({
-    url: AUTH_SERVICE + "/users/me",
+    url: config.authUrl + "/users/me",
     method: "GET",
   });
 }
@@ -68,7 +75,7 @@ export function getUsers() {
   }
 
   return request({
-    url: AUTH_SERVICE + "/users/summaries",
+    url: config.authUrl + "/users/summaries",
     method: "GET",
   });
 }
@@ -78,7 +85,7 @@ export function getUser(id) {
     return Promise.reject("No access token set.");
   }
   return request({
-    url: AUTH_SERVICE + "/getUser/" + id,
+    url: config.authUrl + "/getUser/" + id,
     method: "GET",
   });
 }
@@ -89,18 +96,46 @@ export function getuserSesion(recipientId) {
   }
 
   return request({
-    url: CHAT_SERVICE + "/getUserSession/" + recipientId ,
+    url: config.soketUrl + "/getUserSession/" + recipientId ,
     method: "GET",
   });
 }
 
 export function signup(signupRequest) {
   return request({
-    url: AUTH_SERVICE + "/users",
+    url: config.authUrl + "/users",
     method: "POST",
     body: JSON.stringify(signupRequest),
   });
 }
+
+export function saveGroup(group) {
+  return request({
+    url: config.soketUrl + "/savegroup",
+    method: "POST",
+    body: JSON.stringify(group),
+  });
+}
+
+export function savegroupandMember(group) {
+  return request({
+    url: config.soketUrl + "/savegroupandMember",
+    method: "POST",
+    body: JSON.stringify(group),
+  });
+}
+
+export function getMyGroup(userid) {
+  if (!localStorage.getItem("accessToken")) {
+    return Promise.reject("No access token set.");
+  }
+
+  return request({
+    url: config.soketUrl + "/groups/users/" + userid ,
+    method: "GET",
+  });
+}
+
 
 export function uploadFile(param,files) {
   var formdata = new FormData();
@@ -110,7 +145,7 @@ export function uploadFile(param,files) {
     body: formdata,
     redirect: 'follow'
   };
-  return fetch(FILE_SERVICE + "/uploadFile/" + param , requestOptions).then((response) =>
+  return fetch(config.fileurl + "/uploadFile/" + param , requestOptions).then((response) =>
     response.text().then((text) => {
       if (!response.ok) {
         window.open("/login","_self")

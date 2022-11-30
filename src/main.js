@@ -5,6 +5,7 @@ import home from './screen/home.vue'
 import login from './screen/login.vue'
 import register from './screen/register.vue'
 import Notifications from 'vue-notification'
+import vuetify from '@/plugins/vuetify'
 
 
 
@@ -45,5 +46,6 @@ const router = new VueRouter({
 
 new Vue({
   router,
+  vuetify,
   render: h => h(App)
 }).$mount('#app')

@@ -16,6 +16,7 @@ export const store = new Vuex.Store({
     userSettingsModal:false,
     settingsModal:false,
     profileModal:false,
+    groupModal:false,
     profileItem:{},
     notificationData:JSON.parse(localStorage.getItem("notificationData")) || {
         notification:true,
@@ -58,6 +59,9 @@ export const store = new Vuex.Store({
     setSettingsModal(state, settingsModal) {
       state.settingsModal = settingsModal
     },
+    setGroupModal(state, groupModal) {
+      state.groupModal = groupModal
+    },
     setNotificationData(state, notificationData) {
       state.notificationData = notificationData
     },
@@ -76,6 +80,7 @@ export const store = new Vuex.Store({
     profileItem: state => state.profileItem,
     profileModal: state => state.profileModal,
     settingsModal: state => state.settingsModal,
+    groupModal: state => state.groupModal,
     notificationData: state => state.notificationData,
     profilMedia: state => state.profilMedia,
   }

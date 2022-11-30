@@ -59,7 +59,7 @@
       },
       methods:{
         onConnect:function(){
-            this.SockJS = new SockJS(config.soketUrl);
+            this.SockJS = new SockJS(config.soketUrl + "ws");
             this.stompClient = Stomp.over(this.SockJS);
             this.stompClient.connect({}, this.onConnected, this.onError);
             this.$store.commit('setStompClient', this.stompClient);          
@@ -78,6 +78,10 @@
               "/user/" + userid + "/queue/messages",
               this.onMessageReceived
             );
+             this.stompClient.subscribe(
+              "/user/" + userid + "/queue/groupmessages",
+              this.onGroupMessageReceived
+            );
             this.stompClient.subscribe(
               "/user/" + userid + "/queue/writing",
               this.writeMethod
@@ -87,7 +91,7 @@
               this.seenMsgMethod
             );
         },
-        onMessageReceived:function(msg){
+         onMessageReceived:function(msg){
             const message = JSON.parse(msg.body);
             this.setLastMsg(message);
             const messages = store.state.messages;
@@ -102,6 +106,26 @@
             }
             else {
               this.sendSeenMessage(message.senderId,"2");
+              this.setNotification(message);
+            }
+        },
+        onGroupMessageReceived:function(msg){
+            debugger
+            const message = JSON.parse(msg.body);
+            console.log(message);
+            this.setLasGrouptMsg(message);
+            const messages = store.state.messages;
+            if(! [message.recipientId]) messages[message.recipientId] = [];
+            messages[message.recipientId].push(message);
+            this.$store.commit('setMessages', messages);
+            setTimeout(function(){
+                document.getElementsByClassName("chat-body")[0].scrollTo(0,1000000);
+            },100)
+            if(message.recipientId == store.state.activeChatRoom.recipientId && document.visibilityState === 'visible'){
+              this.sendSeenMessage(message.recipientId,"3");
+            }
+            else {
+              this.sendSeenMessage(message.recipientId,"2");
               this.setNotification(message);
             }
         },
@@ -148,6 +172,26 @@
                         x.lastMsg.senderId = messages.senderId;
                         x.lastMsg.recipientId = messages.recipientId;
                         if(actRecipientId != messages.senderId ) x.count = x.count ? x.count + 1 : 1;
+                        else x.count =0;
+                    }
+                })
+                this.$store.commit('setChatRooms', chatRooms)
+              }
+              
+          },
+          setLasGrouptMsg:function(messages){
+              var actRecipientId = store.state.activeChatRoom.recipientId;
+              var chatRooms = store.state.chatRooms;
+              var item = chatRooms.find(x=> x.recipientId == messages.senderId);
+              if(!item) this.setFistMessage(messages);
+              else {
+                chatRooms.find(x =>{
+                    if(x.recipientId == messages.recipientId ) {
+                        x.lastMsg.content = messages.content;
+                        x.lastMsg.timestamp = messages.timestamp;
+                        x.lastMsg.senderId = messages.senderId;
+                        x.lastMsg.recipientId = messages.recipientId;
+                        if(actRecipientId != messages.recipientId ) x.count = x.count ? x.count + 1 : 1;
                         else x.count =0;
                     }
                 })
